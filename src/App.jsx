@@ -1,35 +1,30 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Header from "./components/todo/Header";
+import { useState } from "react";
+import AddTodo from "./components/todo/Add";
+import TodoList from "./components/todo/List";
+import Container from "./components/Container";
+import Modal from "./components/Modal";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    const [todos, setTodos] = useState([])
+    const [user, setUser] = useState(false)
+    const [modal, setModal] = useState(false)
+
+    const handleCloseModal = () => {
+        setModal(false)
+    }
+
+    return (
+        <main className="flex flex-col gap-4">
+            {modal && <Modal name={modal.name} data={modal.data} close={handleCloseModal} />}
+            <Header user={user} setUser={setUser} />
+            <Container>
+                <AddTodo setTodos={setTodos} user={user} />
+                <TodoList todos={todos} setTodos={setTodos} user={user} setModal={setModal} />
+            </Container>
+        </main>
+    )
 }
 
 export default App
