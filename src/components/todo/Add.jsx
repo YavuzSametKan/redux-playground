@@ -1,7 +1,14 @@
 import {useState} from "react";
 import {nanoid} from "nanoid";
+import {addTodo} from "../../stores/todo";
+import {useDispatch, useSelector} from "react-redux";
 
-const Add = ({ setTodos, user }) => {
+const Add = () => {
+
+    const dispatch = useDispatch()
+
+    // getting user from provider
+    const { user } = useSelector(state => state.auth)
 
     const [todo, setTodo] = useState('')
 
@@ -9,12 +16,12 @@ const Add = ({ setTodos, user }) => {
 
         e.preventDefault() // destroy default behavior
 
-        setTodos(todos => [{
+        dispatch(addTodo({ // add todoItem to todoList
             title: todo,
             done: false,
             id: nanoid(),
-            user: user.id
-        }, ...todos])  // add todoItem to todoList
+            userId: user.id
+        }))
 
         setTodo('') // reset input
 

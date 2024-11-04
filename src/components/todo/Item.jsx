@@ -1,22 +1,34 @@
 import {useAutoAnimate} from "@formkit/auto-animate/react";
+import {useDispatch, useSelector} from "react-redux";
+import {deleteTodo, editTodo} from "../../stores/todo";
+import {openModal} from "../../stores/modal";
 
-const Item = ({ todo, setTodos, user, setModal }) => {
+const Item = ({ todo }) => {
 
     const [animationParent] = useAutoAnimate()
 
+    const dispatch = useDispatch()
+
+    // getting user from provider
+    const { user } = useSelector(state => state.auth)
+
     const handleDelete = () => {
-        setTodos(
-            todos => todos.filter(
-                t => t.id !== todo.id
-            )
-        )
+        dispatch(deleteTodo(todo.id))
     }
 
     const handleEdit = () => {
-        setModal({
+        dispatch(openModal({
             name: 'edit-todo',
             data: todo
-        })
+        }))
+    }
+
+    const handleUpdateDone = () => {
+        dispatch(editTodo({
+            id: todo.id,
+            title: todo.title,
+            done: !todo.done
+        }))
     }
 
     return (
@@ -25,10 +37,17 @@ const Item = ({ todo, setTodos, user, setModal }) => {
             className="w-full pl-6 pr-2 min-h-14 flex justify-between items-center bg-blue-100 rounded-full"
             ref={animationParent}
         >
+            <div className="flex gap-2 items-center">
+                <input
+                    type="checkbox"
+                    checked={todo.done}
+                    onChange={handleUpdateDone}
+                />
 
-            <span className="text-lg">{todo.title}</span>
+                <p className={`text-md ${todo.done && "line-through"}`}>{todo.title}</p>
+            </div>
 
-            {todo.user === user.id &&
+            {todo.userId === user.id &&
                 <div className="inline-flex gap-2">
                     <button
                         onClick={handleEdit}
@@ -36,6 +55,7 @@ const Item = ({ todo, setTodos, user, setModal }) => {
                     >
                         Edit
                     </button>
+
                     <button
                         onClick={handleDelete}
                         className="button bg-red-500 hover:bg-red-600"
@@ -44,7 +64,6 @@ const Item = ({ todo, setTodos, user, setModal }) => {
                     </button>
                 </div>
             }
-
 
         </li>
 

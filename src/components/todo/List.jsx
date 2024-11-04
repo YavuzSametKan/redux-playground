@@ -1,7 +1,11 @@
 import TodoItem from "./Item";
 import {useAutoAnimate} from "@formkit/auto-animate/react";
+import {useSelector} from "react-redux";
 
-const List = ({ todos, setTodos, user, setModal }) => {
+const List = () => {
+
+    // getting todos from provider
+    const { todos } = useSelector(state => state.todo)
 
     const [animationParent] = useAutoAnimate()
 
@@ -14,9 +18,6 @@ const List = ({ todos, setTodos, user, setModal }) => {
                 <TodoItem
                     key={todo.id}
                     todo={todo}
-                    setTodos={setTodos}
-                    user={user}
-                    setModal={setModal}
                 />
             )}
         </ul>

@@ -1,8 +1,16 @@
-const Header = ({ user, setUser }) => {
+import {useDispatch, useSelector} from "react-redux";
+import {login, logout} from "../../stores/auth";
 
-    const handleLogin = (user) => setUser(user)
+const Header = () => {
 
-    const handleLogout = () => setUser(false)
+    const dispatch = useDispatch()
+
+    // getting user from provider
+    const { user } = useSelector(state => state.auth)
+
+    const handleLogin = (user) => dispatch(login(user))
+
+    const handleLogout = () => dispatch(logout())
 
     const userNames = ["Yavuz Samet KAN", "Ahmet Suat CAN", "Serhat ERDEM", "Samet Berkant KOCA"]
 
@@ -29,7 +37,7 @@ const Header = ({ user, setUser }) => {
                     </span>
                     <button
                         className="button bg-red-500 hover:bg-red-600"
-                        onClick={() => handleLogout()}
+                        onClick={handleLogout}
                     >
                         Logout
                     </button>

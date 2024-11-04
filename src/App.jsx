@@ -1,30 +1,28 @@
 import Header from "./components/todo/Header";
-import { useState } from "react";
 import AddTodo from "./components/todo/Add";
 import TodoList from "./components/todo/List";
 import Container from "./components/Container";
-import Modal from "./components/Modal";
+import Modal from "./components/modals";
+import {useSelector} from "react-redux";
+import {useAutoAnimate} from "@formkit/auto-animate/react";
 
 const App = () => {
 
-    const [todos, setTodos] = useState([])
-    const [user, setUser] = useState(false)
-    const [modal, setModal] = useState(false)
-
-    const handleCloseModal = () => {
-        setModal(false)
-    }
+    const { open : isModalOpen } = useSelector(state => state.modal)
 
     return (
+
         <main className="flex flex-col gap-4">
-            {modal && <Modal name={modal.name} data={modal.data} close={handleCloseModal} />}
-            <Header user={user} setUser={setUser} />
+            {isModalOpen && <Modal />}
+            <Header/>
             <Container>
-                <AddTodo setTodos={setTodos} user={user} />
-                <TodoList todos={todos} setTodos={setTodos} user={user} setModal={setModal} />
+                <AddTodo/>
+                <TodoList/>
             </Container>
         </main>
+
     )
+
 }
 
 export default App
